@@ -12,8 +12,12 @@ class MySpider(scrapy.Spider):
         print("Response URL:", response.url)  # Print the URL of the response
         print("Response Status:", response.status)  # Print the HTTP status code of the response
 
-        for i in response.css("div.tUxRFH a.CGtC98::attr('href')"):
-            yield response.follow(i.get(), callback=self.parse_product)
+        if response.css("div._75nlfW a.rPDeLR::attr('href')"):
+            for i in response.css("div._75nlfW a.rPDeLR::attr('href')"):
+                yield response.follow(i.get(), callback=self.parse_product)
+        else:
+            for i in response.css("div.tUxRFH a.CGtC98::attr('href')"):
+                yield response.follow(i.get(), callback=self.parse_product)
 
         # Handle pagination
         if response.css("nav.WSL9JP a._9QVEpD span::text")[-1].get() == "Next":
